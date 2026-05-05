@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package org.skypro.skyshop.product;
 
 public class Product {
@@ -15,10 +10,10 @@ public class Product {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public int getPrice() {
-        return this.price;
+        return price;
     }
 }
