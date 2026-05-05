@@ -2,51 +2,73 @@ package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.search.SearchEngine;
 
+import java.util.List;
+
+// Точка входа в приложение
 public class App {
     public static void main(String[] args) {
 
+        // Создаём товары
         Product apple = new Product("Apple", 50);
         Product banana = new Product("Banana", 30);
         Product milk = new Product("Milk", 120);
-        Product bread = new Product("Bread", 70);
-        Product cheese = new Product("Cheese", 200);
-        Product coffee = new Product("Coffee", 300);
+        Product milk2 = new Product("Milk", 150);
 
+        // Создаём корзину
         ProductBasket basket = new ProductBasket();
 
-        // 1. Добавление продукта
+        // Добавляем товары в корзину
         basket.addProduct(apple);
-
-        // 2. Заполнение корзины + переполнение
         basket.addProduct(banana);
         basket.addProduct(milk);
-        basket.addProduct(bread);
-        basket.addProduct(cheese);
-        basket.addProduct(coffee); // должно быть "Невозможно добавить продукт"
+        basket.addProduct(milk2);
 
-        // 3. Печать
+        // Печатаем корзину
         basket.printBasket();
 
-        // 4. Стоимость
-        System.out.println("Стоимость: " + basket.getTotalPrice());
+        // Удаляем существующий товар (Milk)
+        List<Product> removed = basket.removeByName("Milk");
 
-        // 5. Поиск существующего
-        System.out.println("Есть Milk? " + basket.containsProduct("Milk"));
+        System.out.println("Удалённые продукты:");
 
-        // 6. Поиск отсутствующего
-        System.out.println("Есть Tea? " + basket.containsProduct("Tea"));
+        // Вывод удалённых товаров
+        for (Product p : removed) {
+            System.out.println(p.getName() + ": " + p.getPrice());
+        }
 
-        // 7. Очистка
-        basket.clear();
-
-        // 8. Пустая корзина
+        // Проверяем состояние корзины после удаления
         basket.printBasket();
 
-        // 9. Стоимость пустой
-        System.out.println("Стоимость: " + basket.getTotalPrice());
+        // Пытаемся удалить несуществующий товар
+        List<Product> removedEmpty = basket.removeByName("Tea");
 
-        // 10. Поиск в пустой
-        System.out.println("Есть Apple? " + basket.containsProduct("Apple"));
+        // Проверяем, что список пуст
+        if (removedEmpty.isEmpty()) {
+            System.out.println("Список пуст");
+        }
+
+        // Снова печатаем корзину
+        basket.printBasket();
+
+        // Создаём поисковый движок
+        SearchEngine searchEngine = new SearchEngine();
+
+        // Добавляем товары в поиск
+        searchEngine.addProduct(apple);
+        searchEngine.addProduct(banana);
+        searchEngine.addProduct(milk);
+        searchEngine.addProduct(milk2);
+
+        // Выполняем поиск
+        List<Product> searchResult = searchEngine.search("Milk");
+
+        System.out.println("Результаты поиска:");
+
+        // Выводим результаты поиска
+        for (Product p : searchResult) {
+            System.out.println(p.getName() + ": " + p.getPrice());
+        }
     }
 }
