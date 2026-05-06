@@ -10,24 +10,20 @@ public class ProductBasket {
         products.computeIfAbsent(product.getName(), k -> new LinkedList<>()).add(product);
     }
     public int getTotalPrice() {
-        int sum = 0;
-        for (List<Product> list : products.values()) {
-            for (Product p : list) {
-                sum += p.getPrice();
-            }
-        }
-        return sum;
+        return products.values().stream()
+                .flatMap(List::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
     public void printBasket() {
         if (products.isEmpty()) {
             System.out.println("в корзине пусто");
             return;
         }
-        for (List<Product> list : products.values()) {
-            for (Product p : list) {
-                System.out.println(p.getName() + ": " + p.getPrice());
-            }
-        }
+        products.values().stream()
+                .flatMap(List::stream)
+                .forEach(p -> System.out.println(p.getName() + ": " + p.getPrice()));
+
         System.out.println("Итого: " + getTotalPrice());
     }
     public boolean containsProduct(String name) {
@@ -39,5 +35,11 @@ public class ProductBasket {
     public List<Product> removeByName(String name) {
         List<Product> removed = products.remove(name);
         return removed != null ? removed : new LinkedList<>();
+    }
+    private long getSpecialCount() {
+        return products.values().stream()
+                .flatMap(List::stream)
+                .filter(p -> p.getPrice() > 100)
+                .count();
     }
 }
